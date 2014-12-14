@@ -1,5 +1,7 @@
 package com.internetitem.githook.html;
 
+import com.internetitem.githook.html.TemplateAware;
+import com.internetitem.githook.html.TemplateName;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;

@@ -3,10 +3,6 @@ package com.internetitem.githook;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 import com.internetitem.githook.html.HtmlProvider;
-import freemarker.log.Logger;
-import freemarker.template.DefaultObjectWrapperBuilder;
-import freemarker.template.TemplateExceptionHandler;
-import freemarker.template.Version;
 import org.apache.cxf.bus.spring.SpringBus;
 import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.jaxrs.JAXRSServerFactoryBean;
@@ -27,8 +23,6 @@ import java.util.LinkedList;
 @Configuration
 @ImportResource({"classpath:META-INF/cxf/cxf.xml"})
 public class CxfConfiguration {
-
-	public static final Version FREEMARKER_VERSION = new Version(2, 3, 21);
 
 	@Autowired
 	private ApplicationContext ctx;
@@ -63,22 +57,7 @@ public class CxfConfiguration {
 	}
 
 	@Bean
-	public freemarker.template.Configuration freemarkerConfiguration() {
-		try {
-			Logger.selectLoggerLibrary(Logger.LIBRARY_SLF4J);
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Error setting up logging library: " + e.getMessage(), e);
-		}
-		freemarker.template.Configuration fmConfig = new freemarker.template.Configuration(FREEMARKER_VERSION);
-		fmConfig.setClassForTemplateLoading(CxfConfiguration.class, "/templates");
-		fmConfig.setObjectWrapper(new DefaultObjectWrapperBuilder(FREEMARKER_VERSION).build());
-		fmConfig.setDefaultEncoding("UTF-8");
-		fmConfig.setTemplateExceptionHandler(TemplateExceptionHandler.HTML_DEBUG_HANDLER);
-		return fmConfig;
-	}
-
-	@Bean
-	public JacksonJaxbJsonProvider jsonProvider(){
+	public JacksonJaxbJsonProvider jsonProvider() {
 		JacksonJaxbJsonProvider provider = new JacksonJaxbJsonProvider();
 		provider.setMapper(mapper());
 		return provider;
@@ -86,8 +65,7 @@ public class CxfConfiguration {
 
 	@Bean
 	public ObjectMapper mapper() {
-		ObjectMapper mapper = new ObjectMapper();
-		return mapper;
+		return new ObjectMapper();
 	}
 
 }
