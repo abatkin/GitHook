@@ -1,10 +1,12 @@
 package com.internetitem.githook;
 
+import ch.qos.logback.classic.ViewStatusMessagesServlet;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 import com.internetitem.githook.html.HtmlProvider;
 import org.apache.cxf.bus.spring.SpringBus;
 import org.apache.cxf.endpoint.Server;
+import org.apache.cxf.interceptor.LoggingInInterceptor;
 import org.apache.cxf.jaxrs.JAXRSServerFactoryBean;
 import org.apache.cxf.jaxrs.lifecycle.ResourceProvider;
 import org.apache.cxf.jaxrs.spring.SpringResourceFactory;
@@ -27,10 +29,14 @@ public class CxfConfiguration {
 	@Autowired
 	private ApplicationContext ctx;
 
+	@Bean
+	public ServletRegistrationBean getCxfServletRegistrationBean() {
+		return new ServletRegistrationBean(new CXFServlet(), "/services/*");
+	}
 
 	@Bean
-	public ServletRegistrationBean getServletRegistrationBean() {
-		return new ServletRegistrationBean(new CXFServlet(), "/services/*");
+	public ServletRegistrationBean getLogbackServletRegistrationBean() {
+		return new ServletRegistrationBean(new ViewStatusMessagesServlet(), "/logback");
 	}
 
 	@Bean
@@ -48,7 +54,13 @@ public class CxfConfiguration {
 		factory.setBus(ctx.getBean(SpringBus.class));
 		factory.setProviders(Arrays.asList(jsonProvider(), htmlProvider()));
 		factory.setResourceProviders(resourceProviders);
-		return factory.create();
+		Server server = factory.create();
+
+		if (ctx.getEnvironment().getProperty("logRequests", Boolean.class, Boolean.FALSE).booleanValue()) {
+			server.getEndpoint().getInInterceptors().add(new LoggingInInterceptor());
+		}
+
+		return server;
 	}
 
 	@Bean
