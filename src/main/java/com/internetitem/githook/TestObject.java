@@ -1,5 +1,8 @@
 package com.internetitem.githook;
 
+import com.internetitem.githook.html.TemplateName;
+
+@TemplateName(name = "testobject.ftl")
 public class TestObject {
 	private String name;
 	private  String age;

@@ -16,7 +16,7 @@ public class Githook {
 	private static Logger logger = LoggerFactory.getLogger(Githook.class);
 
 	@GET
-	@Produces("application/json")
+	@Produces({"application/json", "text/html"})
 	public TestObject hello() {
 		return new TestObject("adam", "1");
 	}
