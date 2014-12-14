@@ -3,11 +3,13 @@ package com.internetitem.githook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import javax.ws.rs.*;
 import java.util.Map;
 
-@Component
+@Service
 @Path("/hook")
 public class Githook {
 

@@ -10,10 +10,10 @@
     <packaging>war</packaging>
 
     <properties>
-        <spring.version>4.1.2.RELEASE</spring.version>
-        <spring.boot.version>1.2.0.RC2</spring.boot.version>
-        <jersey.version>2.13</jersey.version>
-        <jackson.version>2.4.2</jackson.version>
+        <spring.version>4.1.3.RELEASE</spring.version>
+        <spring.boot.version>1.2.0.RELEASE</spring.boot.version>
+        <cxf.version>3.0.2</cxf.version>
+        <jackson.version>2.4.4</jackson.version>
     </properties>
 
 
@@ -24,19 +24,19 @@
             <version>${spring.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.fasterxml.jackson.jaxrs</groupId>
-            <artifactId>jackson-jaxrs-json-provider</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-jersey</artifactId>
-            <version>${spring.boot.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
             <version>${spring.boot.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-frontend-jaxrs</artifactId>
+            <version>${cxf.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.jaxrs</groupId>
+            <artifactId>jackson-jaxrs-json-provider</artifactId>
+            <version>${jackson.version}</version>
         </dependency>
     </dependencies>
 
@@ -46,20 +46,16 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
-
-    <repositories>
-        <repository>
-            <id>org.springframework.maven.snapshot</id>
-            <name>Spring Maven Snapshots</name>
-            <url>http://maven.springframework.org/snapshot/</url>
-        </repository>
-        <repository>
-            <id>org.springframework.maven.milestone</id>
-            <name>Spring Maven Milestones</name>
-            <url>http://maven.springframework.org/milestone/</url>
-        </repository>
-    </repositories>
 </project>
