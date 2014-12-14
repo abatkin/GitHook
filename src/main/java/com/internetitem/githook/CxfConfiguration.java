@@ -19,8 +19,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 
 import javax.ws.rs.Path;
+import javax.ws.rs.ext.Provider;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
+import java.util.List;
 
 @Configuration
 @ImportResource({"classpath:META-INF/cxf/cxf.xml"})
@@ -41,18 +43,21 @@ public class CxfConfiguration {
 
 	@Bean
 	public Server jaxRsServer() {
-		LinkedList<ResourceProvider> resourceProviders = new LinkedList<>();
-		for (String beanName : ctx.getBeanDefinitionNames()) {
-			if (ctx.findAnnotationOnBean(beanName, Path.class) != null) {
-				SpringResourceFactory factory = new SpringResourceFactory(beanName);
-				factory.setApplicationContext(ctx);
-				resourceProviders.add(factory);
-			}
+		// Find all beans annotated with @Path
+		List<ResourceProvider> resourceProviders = new ArrayList<>();
+		for (String beanName : ctx.getBeanNamesForAnnotation(Path.class)) {
+			SpringResourceFactory factory = new SpringResourceFactory(beanName);
+			factory.setApplicationContext(ctx);
+			resourceProviders.add(factory);
 		}
+
+		// Find all beans annotated with @Providers
+		List<? extends Object> providers = new ArrayList(ctx.getBeansWithAnnotation(Provider.class).values());
 
 		JAXRSServerFactoryBean factory = new JAXRSServerFactoryBean();
 		factory.setBus(ctx.getBean(SpringBus.class));
-		factory.setProviders(Arrays.asList(jsonProvider(), htmlProvider()));
+
+		factory.setProviders(Arrays.asList(providers));
 		factory.setResourceProviders(resourceProviders);
 		Server server = factory.create();
 
@@ -64,7 +69,7 @@ public class CxfConfiguration {
 	}
 
 	@Bean
-	public Object htmlProvider() {
+	public HtmlProvider htmlProvider() {
 		return new HtmlProvider();
 	}
 
