@@ -4,12 +4,12 @@ import ch.qos.logback.classic.ViewStatusMessagesServlet;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 import com.internetitem.githook.html.HtmlProvider;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.bus.spring.SpringBus;
 import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.interceptor.LoggingInInterceptor;
 import org.apache.cxf.jaxrs.JAXRSServerFactoryBean;
-import org.apache.cxf.jaxrs.lifecycle.ResourceProvider;
-import org.apache.cxf.jaxrs.spring.SpringResourceFactory;
 import org.apache.cxf.transport.servlet.CXFServlet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.embedded.ServletRegistrationBean;
@@ -21,12 +21,13 @@ import org.springframework.context.annotation.ImportResource;
 import javax.ws.rs.Path;
 import javax.ws.rs.ext.Provider;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Configuration
 @ImportResource({"classpath:META-INF/cxf/cxf.xml"})
 public class CxfConfiguration {
+
+	private static final Log logger = LogFactory.getLog(CxfConfiguration.class);
 
 	@Autowired
 	private ApplicationContext ctx;
@@ -44,21 +45,18 @@ public class CxfConfiguration {
 	@Bean
 	public Server jaxRsServer() {
 		// Find all beans annotated with @Path
-		List<ResourceProvider> resourceProviders = new ArrayList<>();
-		for (String beanName : ctx.getBeanNamesForAnnotation(Path.class)) {
-			SpringResourceFactory factory = new SpringResourceFactory(beanName);
-			factory.setApplicationContext(ctx);
-			resourceProviders.add(factory);
-		}
+		List<Object> serviceBeans = new ArrayList<>(ctx.getBeansWithAnnotation(Path.class).values());
+		logger.info("Registering service beans: " + serviceBeans);
 
 		// Find all beans annotated with @Providers
-		List<? extends Object> providers = new ArrayList(ctx.getBeansWithAnnotation(Provider.class).values());
+		List<Object> providers = new ArrayList<>(ctx.getBeansWithAnnotation(Provider.class).values());
+		logger.info("Registering providers: " + providers);
 
 		JAXRSServerFactoryBean factory = new JAXRSServerFactoryBean();
 		factory.setBus(ctx.getBean(SpringBus.class));
-
-		factory.setProviders(Arrays.asList(providers));
-		factory.setResourceProviders(resourceProviders);
+		factory.setAddress("/");
+		factory.setServiceBeans(serviceBeans);
+		factory.setProviders(providers);
 		Server server = factory.create();
 
 		if (ctx.getEnvironment().getProperty("logRequests", Boolean.class, Boolean.FALSE).booleanValue()) {
