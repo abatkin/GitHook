@@ -2,8 +2,8 @@ package com.internetitem.githook.test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.internetitem.githook.GithookReceiverServer;
-import com.internetitem.githook.dataModel.GitHubCommit;
-import com.internetitem.githook.dataModel.GitHubPush;
+import com.internetitem.githook.dataModel.ws.GitHubCommit;
+import com.internetitem.githook.dataModel.ws.GitHubPush;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

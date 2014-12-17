@@ -1,6 +1,6 @@
 package com.internetitem.githook;
 
-import com.internetitem.githook.dataModel.GitHubPush;
+import com.internetitem.githook.dataModel.ws.GitHubPush;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package com.internetitem.githook.dataModel;
+package com.internetitem.githook.dataModel.ws;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
