@@ -12,6 +12,7 @@ public class GitHubCommit {
 	private List<String> added;
 	private String id;
 	private String message;
+	private String timestamp;
 	private String url;
 	private GitHubCommitter author;
 	private GitHubCommitter committer;
@@ -54,6 +55,14 @@ public class GitHubCommit {
 
 	public void setMessage(String message) {
 		this.message = message;
+	}
+
+	public String getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(String timestamp) {
+		this.timestamp = timestamp;
 	}
 
 	public String getUrl() {

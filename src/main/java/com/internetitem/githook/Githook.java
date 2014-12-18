@@ -1,8 +1,12 @@
 package com.internetitem.githook;
 
+import com.internetitem.githook.config.MailNotificationSender;
 import com.internetitem.githook.dataModel.ws.GitHubPush;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.task.TaskExecutor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.ws.rs.*;
@@ -13,6 +17,9 @@ import javax.ws.rs.core.Response;
 public class Githook {
 
 	private static Logger logger = LoggerFactory.getLogger(Githook.class);
+
+	@Autowired
+	private MailNotificationSender mailNotificationSender;
 
 	@GET
 	@Produces({"application/json", "text/html"})
@@ -37,6 +44,9 @@ public class Githook {
 		String before = push.getBefore();
 		String after = push.getAfter();
 		logger.info("Got push for [" + before + "] to [" + after + "]");
+
+		mailNotificationSender.pushAsync(push);
+
 		return buildResponse("Got it!", Response.Status.ACCEPTED);
 	}
 
@@ -49,4 +59,5 @@ public class Githook {
 		boolean success = (status.getFamily() == Response.Status.Family.SUCCESSFUL);
 		return Response.status(status).entity(new RequestStatusEntity(message, success)).build();
 	}
+
 }

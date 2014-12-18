@@ -8,4 +8,5 @@
     <root level="${LogLevel:-INFO}">
         <appender-ref ref="STDOUT"/>
     </root>
+
 </configuration>

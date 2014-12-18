@@ -15,6 +15,8 @@
         <cxf.version>3.0.2</cxf.version>
         <jackson.version>2.4.4</jackson.version>
         <freemarker.version>2.3.21</freemarker.version>
+        <javamail.version>1.4.4</javamail.version>
+        <junit.version>4.12</junit.version>
     </properties>
 
 
@@ -27,6 +29,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <version>${spring.boot.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
             <version>${spring.boot.version}</version>
         </dependency>
         <dependency>
@@ -49,6 +56,11 @@
             <artifactId>freemarker</artifactId>
             <version>${freemarker.version}</version>
         </dependency>
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>${javamail.version}</version>
+        </dependency>
 
         <!-- Test -->
         <dependency>
@@ -60,7 +72,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
