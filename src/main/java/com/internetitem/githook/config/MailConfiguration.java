@@ -74,7 +74,6 @@ public class MailConfiguration {
 		public Map<String, Set<String>> doLoad() throws IOException {
 			Map<String, Set<String>> recipientMap = new HashMap<>();
 
-
 			int numRecipients = 0;
 			int numRepositories = 0;
 
@@ -90,22 +89,28 @@ public class MailConfiguration {
 							if (line.isEmpty() || line.startsWith("#")) {
 								continue;
 							}
+
 							String[] parts = line.split("=", 2);
 							if (parts.length != 2) {
 								throw new IOException("Malformed input on line " + lineNumber);
 							}
-							String repository = parts[0].trim();
-							String mail = parts[1].trim();
 
-							Set<String> recipients = recipientMap.get(repository);
-							if (recipients == null) {
-								recipients = new HashSet<>();
-								recipientMap.put(repository, recipients);
-								numRepositories++;
+							Set<String> allRepositories = parseList(parts[0].trim());
+							Set<String> allMails = parseList(parts[1].trim());
+
+							for (String repository : allRepositories) {
+								Set<String> recipients = recipientMap.get(repository);
+								if (recipients == null) {
+									recipients = new HashSet<>();
+									recipientMap.put(repository, recipients);
+									numRepositories++;
+								}
+								for (String mail : allMails) {
+									logger.debug("Adding recipient [" + mail + "] to repository [" + repository + "]");
+									recipients.add(mail);
+									numRecipients++;
+								}
 							}
-							logger.debug("Adding recipient [" + mail + "] to repository [" + repository + "]");
-							recipients.add(mail);
-							numRecipients++;
 						}
 					}
 				}
@@ -114,6 +119,18 @@ public class MailConfiguration {
 			logger.info("Added " + numRecipients + " recipients to " + numRepositories + " repositories");
 			return recipientMap;
 		}
+	}
+
+	private static Set<String> parseList(String list) {
+		String[] itemArray = list.split(",");
+		Set<String> items = new HashSet<>();
+		for (String item : itemArray) {
+			item = item.trim();
+			if (!item.isEmpty()) {
+				items.add(item);
+			}
+		}
+		return items;
 	}
 
 	public static MailConfiguration load(String filename, long sleepTime) throws IOException {
