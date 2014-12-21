@@ -17,8 +17,8 @@ YAML file to configure where to send notifications. There must be exactly one to
 
 For example:
 
-notifications:
-  - repositories: ["https://github.com/abatkin/GitHook"]
-    emails: ["me@example.com"]
+    notifications:
+      - repositories: ["https://github.com/abatkin/GitHook"]
+        emails: ["me@example.com"]
 
 Repository URLs and e-mails can all appear multiple times.
