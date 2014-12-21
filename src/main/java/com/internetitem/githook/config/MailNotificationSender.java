@@ -31,6 +31,9 @@ public class MailNotificationSender {
 	@Value("${FromAddress}")
 	private String fromAddress;
 
+	@Value("${TestOnly:false}")
+	private boolean testOnly;
+
 	@Autowired
 	private MailConfiguration mailConfiguration;
 
@@ -58,6 +61,11 @@ public class MailNotificationSender {
 			Set<String> recipients = mailConfiguration.getRecipients(url);
 			if (recipients == null || recipients.isEmpty()) {
 				logger.info("No recipients for repository " + url);
+				return;
+			}
+
+			if (testOnly) {
+				logger.info("TEST - Would notify about push to " + url + ": " + recipients);
 				return;
 			}
 

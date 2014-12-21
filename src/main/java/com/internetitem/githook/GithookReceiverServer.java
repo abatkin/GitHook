@@ -1,8 +1,6 @@
 package com.internetitem.githook;
 
 import com.internetitem.githook.config.MailConfiguration;
-import com.internetitem.githook.config.MailConfigurationLoader;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.mail.MailSenderAutoConfiguration;
@@ -11,8 +9,6 @@ import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.task.TaskExecutor;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.io.IOException;
@@ -24,12 +20,15 @@ public class GithookReceiverServer extends SpringBootServletInitializer {
 	@Value("${RecipientConfig}")
 	private String recipientConfig;
 
-	@Autowired
-	private MailConfigurationLoader mailConfigurationLoader;
+	@Value("${SleepTime:10000}")
+	private long sleepTime;
 
 	@Bean
 	public MailConfiguration getMailConfiguration() throws IOException {
-		return mailConfigurationLoader.load(recipientConfig);
+		if (sleepTime < 5000) {
+			sleepTime = 5000;
+		}
+		return MailConfiguration.load(recipientConfig, sleepTime);
 	}
 
 	@Bean
