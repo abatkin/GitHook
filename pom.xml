@@ -66,6 +66,11 @@
             <artifactId>mail</artifactId>
             <version>${javamail.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.internetitem.spring</groupId>
+            <artifactId>spring-boot-cxf-jaxrs</artifactId>
+            <version>1.0</version>
+        </dependency>
 
         <!-- Test -->
         <dependency>
