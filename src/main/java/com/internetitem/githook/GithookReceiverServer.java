@@ -2,7 +2,6 @@ package com.internetitem.githook;
 
 import ch.qos.logback.classic.ViewStatusMessagesServlet;
 import com.internetitem.githook.config.MailConfiguration;
-import com.internetitem.githook.html.HtmlProvider;
 import com.internetitem.spring.cxf.CxfConfiguration;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -19,7 +18,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import java.io.IOException;
 
 @ComponentScan(basePackageClasses = {MailSenderAutoConfiguration.class, GithookReceiverServer.class})
-@Import(CxfConfiguration.class)
+@Import({CxfConfiguration.class})
 @EnableAutoConfiguration
 public class GithookReceiverServer extends SpringBootServletInitializer {
 
@@ -32,11 +31,6 @@ public class GithookReceiverServer extends SpringBootServletInitializer {
 	@Bean
 	public ServletRegistrationBean getLogbackServletRegistrationBean() {
 		return new ServletRegistrationBean(new ViewStatusMessagesServlet(), "/logback");
-	}
-
-	@Bean
-	public HtmlProvider htmlProvider() {
-		return new HtmlProvider();
 	}
 
 	@Bean

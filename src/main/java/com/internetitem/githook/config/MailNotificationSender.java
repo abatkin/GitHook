@@ -2,7 +2,7 @@ package com.internetitem.githook.config;
 
 import com.internetitem.githook.dataModel.ws.GitHubPush;
 import com.internetitem.githook.dataModel.ws.GitHubRepository;
-import com.internetitem.githook.html.HtmlGenerator;
+import com.internetitem.web.html.Renderer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ public class MailNotificationSender {
 	public static final Logger logger = LoggerFactory.getLogger(MailNotificationSender.class);
 
 	@Autowired
-	private HtmlGenerator htmlGenerator;
+	private Renderer htmlGenerator;
 
 	@Autowired
 	private JavaMailSender mailSender;

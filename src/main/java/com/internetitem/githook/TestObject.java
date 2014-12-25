@@ -1,6 +1,7 @@
 package com.internetitem.githook;
 
-import com.internetitem.githook.html.TemplateName;
+
+import com.internetitem.web.html.TemplateName;
 
 @TemplateName(name = "testobject.ftl")
 public class TestObject {
