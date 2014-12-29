@@ -17,8 +17,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.io.IOException;
 
-@ComponentScan(basePackageClasses = {MailSenderAutoConfiguration.class, GithookReceiverServer.class})
-@Import({CxfConfiguration.class})
+@ComponentScan
 @EnableAutoConfiguration
 public class GithookReceiverServer extends SpringBootServletInitializer {
 
